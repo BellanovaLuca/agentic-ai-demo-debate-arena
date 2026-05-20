@@ -4,51 +4,27 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Fraunces', 'Times New Roman', 'serif'],
-        sans: [
-          'Inter Tight',
-          'Inter',
-          'Segoe UI',
-          'system-ui',
-          '-apple-system',
-          'sans-serif',
-        ],
-        mono: [
-          'JetBrains Mono',
-          'ui-monospace',
-          'SFMono-Regular',
-          'Menlo',
-          'monospace',
-        ],
+        editorial: ['"Playfair Display"', 'Georgia', 'serif'],
+        hand: ['"Patrick Hand"', 'cursive'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       colors: {
-        optimist: {
-          50: '#f0f9ff',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
+        paper: '#f5f1e8',
+        ink: '#1b1a17',
+        teal: {
+          500: '#0e8a7a',
         },
-        skeptic: {
-          50: '#fdf4ff',
-          400: '#c084fc',
-          500: '#a855f7',
-          600: '#9333ea',
-          700: '#7e22ce',
+        royal: {
+          500: '#6c2bd9',
         },
-        judge: {
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
+        accent: {
+          500: '#c1361d',
         },
-        arena: {
-          bg: '#0b0f1a',
-          panel: '#111827',
-          border: '#1f2937',
-        },
-      },
-      animation: {
-        'pulse-tool': 'pulse 1.2s ease-in-out infinite',
+        muted: '#9b8c7a',
+        // Alias compatibili per Recharts/ErrorBoundary che usano vecchi nomi.
+        optimist: { 500: '#0e8a7a', 400: '#0e8a7a' },
+        skeptic: { 500: '#6c2bd9', 400: '#6c2bd9' },
       },
     },
   },

@@ -22,8 +22,8 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
   render() {
     if (this.state.err) {
       return (
-        <div style={{ padding: 24, color: '#fecaca', fontFamily: 'monospace', lineHeight: 1.4 }}>
-          <h1 style={{ color: '#fca5a5', fontSize: 18, marginBottom: 12 }}>
+        <div style={{ padding: 24, color: '#c1361d', fontFamily: 'monospace', lineHeight: 1.4, background: '#f5f1e8', minHeight: '100vh' }}>
+          <h1 style={{ color: '#c1361d', fontSize: 18, marginBottom: 12 }}>
             ✖ App crashata
           </h1>
           <p style={{ marginBottom: 8 }}>{this.state.err.message}</p>

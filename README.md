@@ -27,7 +27,7 @@ Inserisci un tema (o usa il bottone `random` per uno di esempio), premi **START*
 | | |
 |---|---|
 | **Frontend** | React 18 + Vite + TypeScript (strict) |
-| **Styling** | TailwindCSS + Framer Motion |
+| **Styling** | TailwindCSS + tema editoriale "paper" (Playfair Display + Patrick Hand + Inter + JetBrains Mono) |
 | **Charts** | Recharts |
 | **State** | Zustand |
 | **LLM** | Google Gemini 2.0 Flash via `@google/genai` |
@@ -43,7 +43,8 @@ src/
   tools/          web_search, execute_code, create_chart, fact_check + dispatch
   debate-loop/    schedule, debaterTurn, judgeRunner, runDebate (orchestratore)
   store/          Zustand store (fonte unica di verita)
-  ui/             componenti React + animazioni
+  ui/design/      componenti UI del tema editoriale (Setup + Live + Scoreboard + modali)
+  ui/             ErrorBoundary + ChartCard condivisi
   lib/            gemini client, env, logger, ids, timeout, jsonParse
 ```
 

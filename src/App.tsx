@@ -1,69 +1,100 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { AgentColumn } from './ui/AgentColumn';
-import { Arena } from './ui/Arena';
-import { Header } from './ui/Header';
-import { JudgePanel } from './ui/JudgePanel';
-import { VerdictModal } from './ui/VerdictModal';
+import { useDebateStore } from './store/debateStore';
+import { DebateLive } from './ui/design/DebateLive';
+import { DebateSetup } from './ui/design/DebateSetup';
+import { InfoDialog } from './ui/design/InfoDialog';
+import { VerdictModal } from './ui/design/VerdictModal';
 
-// Layout principale:
-// - Pagina verticalmente scrollabile (niente lock a h-screen). Header sticky.
-// - In modalita' normale: le 3 colonne hanno un min-height ampio cosi i
-//   contenuti restano leggibili; il pannello giudice e' sotto, l'utente
-//   scrolla per vederlo per intero.
-// - In modalita' "espansa": l'arena occupa l'intero viewport e nasconde
-//   colonne e giudice (toggle dal bottone "Espandi" in Arena).
+type View = 'setup' | 'live';
+
+function downloadDebateJson(): void {
+  const state = useDebateStore.getState();
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    topic: state.config?.topic ?? '',
+    positions: state.config?.positions ?? null,
+    status: state.status,
+    turns: state.turns,
+    citations: Object.values(state.citationsById),
+    charts: Object.values(state.chartsById),
+    cumulativeScore: state.cumulativeScore,
+    verdict: state.verdict,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const slug =
+    (state.config?.topic ?? 'debate')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40) || 'debate';
+  a.href = url;
+  a.download = `${slug}-${Date.now()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 export default function App() {
-  const [arenaExpanded, setArenaExpanded] = useState(false);
+  const status = useDebateStore((s) => s.status);
+  const verdict = useDebateStore((s) => s.verdict);
+  const requestCancel = useDebateStore((s) => s.requestCancel);
+  const reset = useDebateStore((s) => s.reset);
+  const [view, setView] = useState<View>('setup');
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [verdictOpen, setVerdictOpen] = useState(false);
 
-  if (arenaExpanded) {
-    return (
-      <div className="flex h-screen flex-col overflow-hidden">
-        {/* In modalita' espansa l'header viene rimosso del tutto: tutti i
-            controlli essenziali (Pausa/Stop/Comprimi) restano accessibili
-            dentro la toolbar dell'Arena. */}
-        <div className="flex min-h-0 flex-1 p-3">
-          <Arena
-            expanded
-            onToggleExpand={() => setArenaExpanded(false)}
-          />
-        </div>
-        <VerdictModal />
-      </div>
-    );
-  }
+  // Passa automaticamente alla live quando il dibattito parte
+  // (status diventa configuring/running) e ritorna a setup se l'utente fa
+  // explicit reset / nuovo dibattito.
+  useEffect(() => {
+    if (
+      status === 'configuring' ||
+      status === 'running' ||
+      status === 'paused' ||
+      status === 'completed' ||
+      status === 'cancelled' ||
+      status === 'error'
+    ) {
+      setView('live');
+    }
+  }, [status]);
+
+  // Quando arriva un nuovo verdict (oggetto identity-changed) lo apriamo
+  // automaticamente. L'utente puo' poi chiuderlo e riaprirlo manualmente
+  // dal bottone "⚖ verdetto" nella toolbar.
+  useEffect(() => {
+    if (verdict) setVerdictOpen(true);
+  }, [verdict]);
+
+  const goToSetup = () => {
+    // Se un dibattito e' in corso, lo interrompiamo prima di tornare al setup
+    // per evitare di lasciare il loop running in background.
+    if (status === 'running' || status === 'paused' || status === 'configuring') {
+      requestCancel();
+    }
+    reset();
+    setVerdictOpen(false);
+    setView('setup');
+  };
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="shrink-0">
-        <Header />
-      </div>
-
-      {/* Area principale a 3 colonne: altezza vincolata al viewport cosi
-          la conversazione centrale (e i contenuti delle colonne agenti)
-          scorrono INTERNAMENTE invece di allungare a oltranza la pagina.
-          - min: 500px per leggibilita' su viewport corti
-          - viewport-based: 100vh meno header e margini
-          - max: 760px cosi su monitor enormi non si "sgrana" */}
-      <div className="grid grid-cols-1 gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)]">
-        <div className="h-[clamp(500px,calc(100vh-220px),760px)]">
-          <AgentColumn agent="optimist" side="left" />
-        </div>
-        <div className="h-[clamp(500px,calc(100vh-220px),760px)]">
-          <Arena
-            expanded={false}
-            onToggleExpand={() => setArenaExpanded(true)}
-          />
-        </div>
-        <div className="h-[clamp(500px,calc(100vh-220px),760px)]">
-          <AgentColumn agent="skeptic" side="right" />
-        </div>
-      </div>
-
-      {/* Giudice in fondo, raggiungibile via scroll. */}
-      <JudgePanel />
-
-      <VerdictModal />
-    </div>
+    <>
+      {view === 'setup' ? (
+        <DebateSetup onInfo={() => setInfoOpen(true)} />
+      ) : (
+        <DebateLive
+          onNewDebate={goToSetup}
+          onInfo={() => setInfoOpen(true)}
+          onExport={downloadDebateJson}
+          onOpenVerdict={() => setVerdictOpen(true)}
+        />
+      )}
+      <InfoDialog open={infoOpen} onClose={() => setInfoOpen(false)} />
+      <VerdictModal open={verdictOpen} onClose={() => setVerdictOpen(false)} />
+    </>
   );
 }

@@ -1,12 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- background: paper con bordo ink -->
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="#f5f1e8" stroke="#1b1a17" stroke-width="2.5"/>
+
+  <!-- cerchio centrale diviso verticalmente: teal (ottimista) vs viola (scettico) -->
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0ea5e9"/>
-      <stop offset="100%" stop-color="#a855f7"/>
-    </linearGradient>
+    <clipPath id="circ">
+      <circle cx="32" cy="32" r="18"/>
+    </clipPath>
   </defs>
-  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bg)"/>
-  <g stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none">
-    <path d="M32 13v8M32 43v8M13 32h8M43 32h8M18.5 18.5l5.7 5.7M39.8 39.8l5.7 5.7M18.5 45.5l5.7-5.7M39.8 24.2l5.7-5.7"/>
+  <g clip-path="url(#circ)">
+    <rect x="14" y="14" width="18" height="36" fill="#0e8a7a"/>
+    <rect x="32" y="14" width="18" height="36" fill="#6c2bd9"/>
   </g>
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#1b1a17" stroke-width="2.4"/>
+
+  <!-- linea verticale di separazione (linea nera del masthead) -->
+  <line x1="32" y1="14" x2="32" y2="50" stroke="#1b1a17" stroke-width="2"/>
+
+  <!-- accento rosso: "vs" come puntino centrale -->
+  <circle cx="32" cy="32" r="3.2" fill="#c1361d" stroke="#1b1a17" stroke-width="1.4"/>
 </svg>
