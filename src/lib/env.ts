@@ -1,4 +1,3 @@
-// Settings centralizzato, validato all'import. CLAUDE.md sez. 5.5.
 // Se manca la chiave Gemini ritorna `null` invece di crashare,
 // cosi la UI puo mostrare un messaggio chiaro all'utente.
 

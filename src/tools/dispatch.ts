@@ -6,7 +6,7 @@ import type { ParsedToolCall, ToolContext, ToolResult } from './types';
 import { runWebSearch } from './webSearch';
 
 // Dispatcher singolo. Garantisce che ogni tool venga eseguito con il proprio
-// shape di args. Rifiuta tool non in lista (CLAUDE.md 2.1 whitelist).
+// shape di args. Rifiuta tool non in lista.
 export async function dispatchToolCall(
   call: ParsedToolCall,
   ctx: ToolContext,

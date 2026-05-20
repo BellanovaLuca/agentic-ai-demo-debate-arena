@@ -112,7 +112,7 @@ counter_argumentation. Output JSON:
   scettico: { logical: N, sources: N, data: N, counter: N },
   commentary: 'breve commento del turno' }"
 
-## Setup iniziale per Claude Code
+## Setup iniziale
 1. Inizializza Vite + React + TS + Tailwind
 2. Installa: framer-motion, recharts, zustand, @google/generative-ai
 3. Struttura: /src/{agents,judge,tools,ui,store,debate-loop}

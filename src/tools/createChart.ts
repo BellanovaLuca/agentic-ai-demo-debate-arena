@@ -11,7 +11,7 @@ const ALLOWED_TYPES: ReadonlySet<ChartSpec['type']> = new Set([
   'pie',
 ]);
 
-// Validazione strict dello spec del grafico (CLAUDE.md 2.7: validare i bordi).
+// Validazione strict dello spec del grafico.
 // Rifiuta dati malformati invece di provare a "salvarli".
 export function runCreateChart(
   args: Record<string, unknown>,

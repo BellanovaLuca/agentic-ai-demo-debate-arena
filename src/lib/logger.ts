@@ -1,6 +1,6 @@
 import { APP_ENV } from './env';
 
-// Logger leggero. CLAUDE.md 5.6: niente print, livelli espliciti,
+// Logger leggero. niente print, livelli espliciti,
 // in dev tono friendly, in prod (build) si potrebbe spingere a JSON.
 
 type Level = 'debug' | 'info' | 'warn' | 'error';

@@ -151,98 +151,103 @@ export function DebateLive({
         </div>
       </div>
 
-      {/* toolbar sotto la linea nera, riga 1: pausa/stop + export + nuovo dibattito */}
+      {/* headline + toolbar laterale: tema a sinistra, controlli compatti a destra
+          (stessa riga per recuperare spazio verticale per la conversazione) */}
       <div
         style={{
           display: 'flex',
-          justifyContent: 'flex-end',
-          gap: 6,
-          paddingTop: 10,
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          gap: 20,
+          padding: '8px 0 4px',
+          flexWrap: 'wrap',
         }}
       >
-        {isRunning && (
-          <>
-            <button
-              type="button"
-              onClick={togglePause}
-              style={smallBtn(INK, false)}
-              title={isPaused ? 'Riprendi il dibattito' : 'Metti in pausa'}
-            >
-              {isPaused ? '▶ riprendi' : '⏸ pausa'}
-            </button>
-            <button
-              type="button"
-              onClick={requestCancel}
-              style={smallBtn(ACCENT, false)}
-              title="Interrompi il dibattito"
-            >
-              ⏹ stop
-            </button>
-          </>
-        )}
-        <button onClick={onExport} style={smallBtn(INK, false)} title="Esporta JSON">
-          ↓ export
-        </button>
-        <button
-          onClick={onNewDebate}
-          style={smallBtn(INK, false)}
-          title="Torna al setup e inizia un nuovo dibattito"
-        >
-          ← nuovo dibattito
-        </button>
-      </div>
-
-      {/* toolbar riga 2 (sotto "nuovo dibattito"): verdetto + espandi conversazione */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: 6,
-          paddingTop: 6,
-        }}
-      >
-        {verdict && (
-          <button
-            onClick={onOpenVerdict}
-            style={smallBtn(ACCENT, false)}
-            title="Riapri il verdetto del giudice"
+        <div style={{ flex: '1 1 320px', minWidth: 0 }}>
+          <Note style={{ marginBottom: 4 }}>
+            {status === 'completed'
+              ? 'tema · dibattito concluso'
+              : status === 'cancelled'
+                ? 'tema · dibattito interrotto'
+                : status === 'error'
+                  ? 'tema · errore'
+                  : 'tema · dibattito in corso'}
+          </Note>
+          <div
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: 'italic',
+              fontSize: 26,
+              lineHeight: 1.1,
+              letterSpacing: -0.5,
+              maxWidth: 1100,
+            }}
           >
-            ⚖ verdetto
-          </button>
-        )}
-        <button
-          onClick={() => setFullscreenOpen(true)}
-          style={smallBtn(INK, false)}
-          title="Espandi la conversazione a tutto schermo per una lettura facilitata"
-        >
-          ⤢ espandi conversazione
-        </button>
-      </div>
+            "{topic || 'in attesa…'}"
+          </div>
+          <HandUnderline w={320} color={ACCENT} style={{ marginTop: 2 }} />
+        </div>
 
-      {/* headline */}
-      <div style={{ padding: '12px 0 10px' }}>
-        <Note style={{ marginBottom: 4 }}>
-          {status === 'completed'
-            ? 'tema · dibattito concluso'
-            : status === 'cancelled'
-              ? 'tema · dibattito interrotto'
-              : status === 'error'
-                ? 'tema · errore'
-                : 'tema · dibattito in corso'}
-        </Note>
         <div
           style={{
-            fontFamily: "'Playfair Display', serif",
-            fontStyle: 'italic',
-            fontSize: 30,
-            lineHeight: 1.05,
-            letterSpacing: -0.5,
-            maxWidth: 1100,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6,
+            alignItems: 'flex-end',
+            flexShrink: 0,
           }}
         >
-          "{topic || 'in attesa…'}"
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {isRunning && (
+              <>
+                <button
+                  type="button"
+                  onClick={togglePause}
+                  style={smallBtn(INK, false)}
+                  title={isPaused ? 'Riprendi il dibattito' : 'Metti in pausa'}
+                >
+                  {isPaused ? '▶ riprendi' : '⏸ pausa'}
+                </button>
+                <button
+                  type="button"
+                  onClick={requestCancel}
+                  style={smallBtn(ACCENT, false)}
+                  title="Interrompi il dibattito"
+                >
+                  ⏹ stop
+                </button>
+              </>
+            )}
+            <button onClick={onExport} style={smallBtn(INK, false)} title="Esporta JSON">
+              ↓ export
+            </button>
+            <button
+              onClick={onNewDebate}
+              style={smallBtn(INK, false)}
+              title="Torna al setup e inizia un nuovo dibattito"
+            >
+              ← nuovo dibattito
+            </button>
+          </div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {verdict && (
+              <button
+                onClick={onOpenVerdict}
+                style={smallBtn(ACCENT, false)}
+                title="Riapri il verdetto del giudice"
+              >
+                ⚖ verdetto
+              </button>
+            )}
+            <button
+              onClick={() => setFullscreenOpen(true)}
+              style={smallBtn(INK, false)}
+              title="Espandi la conversazione a tutto schermo per una lettura facilitata"
+            >
+              ⤢ espandi conversazione
+            </button>
+          </div>
         </div>
-        <HandUnderline w={360} color={ACCENT} style={{ marginTop: 2 }} />
       </div>
 
       {error && status === 'error' && (
@@ -270,7 +275,7 @@ export function DebateLive({
           display: 'grid',
           gridTemplateColumns: '1fr 1.5px 1fr',
           gap: 28,
-          paddingTop: 10,
+          paddingTop: 16,
           flex: 1,
           minHeight: 0,
         }}

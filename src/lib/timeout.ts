@@ -1,4 +1,4 @@
-// Helper per dare un timeout a qualsiasi Promise. CLAUDE.md 3.2:
+// Helper per dare un timeout a qualsiasi Promise.
 // ogni I/O esterno ha timeout esplicito.
 
 export class TimeoutError extends Error {

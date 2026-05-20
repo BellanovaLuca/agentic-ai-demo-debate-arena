@@ -5,7 +5,7 @@ import { APP_ENV } from './env';
 import { createLogger } from './logger';
 import { withTimeout } from './timeout';
 
-// AVVISO SICUREZZA — CLAUDE.md 2.5:
+// AVVISO SICUREZZA:
 // In una webapp di produzione la chiave Gemini NON deve essere esposta nel
 // bundle frontend. Questo progetto e una demo locale: la chiave sta in .env
 // e gira solo in dev. Per produzione: proxy backend che firma le chiamate.
@@ -49,7 +49,7 @@ export interface GenerateResult {
 
 // Wrapper unico per tutte le chiamate Gemini.
 // - streaming con callback (per UX "pensiero che si forma")
-// - timeout esplicito (CLAUDE.md 3.2)
+// - timeout esplicito
 // - estrazione strutturata di grounding metadata
 // - jsonOutput=true imposta responseMimeType=application/json
 //
