@@ -95,7 +95,7 @@ export function InfoDialog({ open, onClose }: Props) {
 
         <Section title="che cos'è">
           Due agenti AI con personalità opposte — <strong>L'Ottimista Tech</strong> e{' '}
-          <strong>Lo Scettico Critico</strong> — dibattono in italiano su un tema scelto da te. Un{' '}
+          <strong>Lo Scettico Critico</strong> — dibattono su un tema scelto da te. Un{' '}
           <strong style={{ color: ACCENT }}>giudice</strong> imparziale valuta ogni turno su 4 assi
           (logica, fonti, dati, replica) ed emette un verdetto finale motivato.
         </Section>
